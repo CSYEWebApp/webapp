@@ -2,7 +2,8 @@ name: IntegrationTest
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
@@ -27,38 +28,3 @@ jobs:
           chmod +x ./mvnw
           ./mvnw clean install
           ./mvnw test
-          
-
-#      - name: Set up MySQL
-#        run: |
-#          sudo apt-get update
-#          sudo apt-get install -y mysql-server mysql-client
-#
-#      - name: Start and check MySQL
-#        run: |
-#          sudo systemctl start mysql
-#          sudo systemctl enable mysql
-#          sudo systemctl status mysql
-#
-#      - name: Create User and Grant Access
-#        run: |
-#          sudo mysql -e "CREATE USER '${{ secrets.MYSQLUSERNAME}}'@'${{ secrets.MYSQLHOST}}' IDENTIFIED BY '${{ secrets.MYSQLPASSWORD}}';"
-#          sudo mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${{ secrets.MYSQLUSERNAME}}'@'${{ secrets.MYSQLHOST}}' WITH GRANT OPTION;"
-#          sudo mysql -e "FLUSH PRIVILEGES;"
-#
-#      - name: Build and Test
-#        env:
-#          DBHost: ${{ secrets.MYSQLHOST}}
-#          DBPort: ${{ secrets.MYSQLPORT}}
-#          DBDatabase: ${{ secrets.MYSQLDATABASE}}
-#          DBUser: ${{ secrets.MYSQLUSERNAME}}
-#          DBPassword: ${{ secrets.MYSQLPASSWORD}}
-#          AvailabilityZone: randomZone
-#          snsTopicArn: randomARN
-#          awsRegion: randomRegion
-#        run: |
-#          pwd
-#          ls -al
-#          chmod +x ./mvnw
-#          ./mvnw clean install
-#          ./mvnw test
