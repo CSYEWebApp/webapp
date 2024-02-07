@@ -30,7 +30,7 @@ public class UserController {
         String email = authenticationService.getCredentialsFromRequest(request)[0];
         System.out.println(email);
         User user = userservice.findByUsername(email);
-        userservice.updateUser(user, updateUserInfo);
+        userservice.updateUser(user, updateUserInfo); //wef
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }
