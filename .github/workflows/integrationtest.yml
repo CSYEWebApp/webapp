@@ -1,19 +1,12 @@
----
-name: First Workflow
+name: IntegrationTest
 
 on:
-  push:
-    branches:
-      - 'main'
   pull_request:
-    types:
-      - opened
-    branches: 
-      - 'main'
+    branches: [ "main" ]
 
 jobs:
   build:
-    name: Integration1 test
+    name: Integration test
     runs-on: ubuntu-latest
 
     steps:
