@@ -1,40 +1,14 @@
-name: IntegrationTest
+---
+name: First Workflow
 
 on:
   pull_request:
     branches: [ "main" ]
 
 jobs:
-  build:
-    name: Integration1 test
+  validate-ami-template:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-          java-version: 17
-          distribution: 'temurin'
-          cache: maven
-
-      - name: Set up MySQL
-        run: |
-          sudo apt-get update
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server mysql-client
-          sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${{ secrets.MYSQL_PASSWORD }}';"
-
-      - name: Start and check MySQL
-        run: |
-          sudo systemctl start mysql
-          sudo systemctl enable mysql
-          echo "MySQLEnable"
-          sudo systemctl status mysql
-
-      - name: Build and Test
-        run: |
-          pwd
-          ls -al
-          mvn clean install
+      - name: first step
+        run: echo "Hello World!"
