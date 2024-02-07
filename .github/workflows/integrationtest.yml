@@ -32,7 +32,6 @@ jobs:
           sudo systemctl enable mysql
           echo "MySQLEnable"
           sudo systemctl status mysql
-          sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${{ secrets.MYSQL_PASSWORD }}';"
 
       - name: Build and Test
         run: |
