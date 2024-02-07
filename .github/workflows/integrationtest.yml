@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: Integration test
+    name: Integration1 test
     runs-on: ubuntu-latest
 
     steps:
