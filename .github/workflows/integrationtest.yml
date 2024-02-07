@@ -2,8 +2,13 @@
 name: First Workflow
 
 on:
+  push:
+    branches:
+      - 'main'
+      - 'releases/**'
   pull_request:
-    branches: [ "main" ]
+    branches: 
+      - 'main'
 
 jobs:
   validate-ami-template:
