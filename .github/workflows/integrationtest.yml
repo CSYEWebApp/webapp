@@ -32,6 +32,7 @@ jobs:
           sudo systemctl enable mysql
           echo "MySQLEnable"
           sudo systemctl status mysql
+          sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'STEYNlee@858';"
 
       - name: Build and Test
         run: |
