@@ -1,19 +1,12 @@
----
-name: First Workflow
+name: IntegrationTest
 
 on:
-  push:
-    branches:
-      - 'main'
   pull_request:
-    types:
-      - opened
-    branches: 
-      - 'main'
+    branches: [ "main" ]
 
 jobs:
   build:
-    name: Integration1 test
+    name: Integration test
     runs-on: ubuntu-latest
 
     steps:
@@ -26,3 +19,22 @@ jobs:
           java-version: 17
           distribution: 'temurin'
           cache: maven
+
+      - name: Set up MySQL
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server mysql-client
+          sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${{ secrets.MYSQL_PASSWORD }}';"
+
+      - name: Start and check MySQL
+        run: |
+          sudo systemctl start mysql
+          sudo systemctl enable mysql
+          echo "MySQLEnable"
+          sudo systemctl status mysql
+
+      - name: Build and Test
+        run: |
+          pwd
+          ls -al
+          mvn clean install
