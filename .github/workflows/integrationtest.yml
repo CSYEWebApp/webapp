@@ -24,7 +24,7 @@ jobs:
         uses: mirromutth/mysql-action@v1.1
         with:
           mysql database: 'hdbapp'
-          mysql user: 'vamsi'
+          mysql user: 'vamsjsdf'
           mysql password: '${{ secrets.MYSQL_PASSWORD }}'
 
       - name: Build and Test
