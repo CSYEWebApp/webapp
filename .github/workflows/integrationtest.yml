@@ -24,8 +24,8 @@ jobs:
         uses: mirromutth/mysql-action@v1.1
         with:
           mysql database: 'hdbapp'
-          mysql user: 'vamsi' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
-          mysql password: 'vamsikeer'
+          mysql user: 'vamsi'
+          mysql password: '${{ secrets.MYSQL_PASSWORD }}'
 
       - name: Build and Test
         run: |
