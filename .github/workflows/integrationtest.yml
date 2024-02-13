@@ -32,3 +32,4 @@ jobs:
           pwd
           ls -al
           mvn clean install
+          exit 1
