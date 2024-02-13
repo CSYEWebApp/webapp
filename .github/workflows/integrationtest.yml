@@ -29,6 +29,7 @@ jobs:
 
       - name: Build and Test
         run: |
+          exit 1
           pwd
           ls -al
           mvn clean install
