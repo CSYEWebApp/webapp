@@ -61,6 +61,7 @@ public class SecurityConfig {
             if(!healthService.checkDatabaseConnectivity()){
                 response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
             }else{
+                System.out.println("Here in customAuthenticationEntryPoint");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
         };
