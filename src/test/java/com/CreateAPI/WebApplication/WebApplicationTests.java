@@ -14,7 +14,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(locations="classpath:application.properties")
+@TestPropertySource(locations="classpath:application-test.properties")
 class WebApplicationTests {
 
     @LocalServerPort

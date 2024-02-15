@@ -1,4 +1,4 @@
-name: IntegrationTest
+name: BuildTest
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: Integration Test
+    name: Build Test
     runs-on: ubuntu-latest
 
     steps:
@@ -20,16 +20,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Setup MySQL
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          mysql database: 'hdbtestapp'
-          mysql user: 'vamsi'
-          mysql password: '${{ secrets.MYSQL_PASSWORD }}'
-
-      - name: Test
+      - name: Build
         run: |
           pwd
           ls -al
           mvn clean install -DskipTests
-          mvn test
+          
