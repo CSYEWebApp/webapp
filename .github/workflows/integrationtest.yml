@@ -23,7 +23,7 @@ jobs:
       - name: Setup MySQL
         uses: mirromutth/mysql-action@v1.1
         with:
-          mysql database: 'hdbtestapp'
+          mysql database: 'hdptestapp'
           mysql user: 'vamsi'
           mysql password: '${{ secrets.MYSQL_PASSWORD }}'
 
@@ -31,5 +31,4 @@ jobs:
         run: |
           pwd
           ls -al
-          mvn clean install -DskipTests
-          mvn test
+          mvn clean install -DskipTests=false
