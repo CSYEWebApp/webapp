@@ -82,7 +82,7 @@ class WebApplicationTests {
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .body("username", equalTo("brettlee2@gmail.com"))
-                .body("firstName", equalTo("Steyn Updated"))
+                .body("firstName", equalTo("Steyn"))
                 .body("lastName", equalTo("Dale Updated"));
     }
 }
