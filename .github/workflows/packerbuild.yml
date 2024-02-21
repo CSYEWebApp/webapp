@@ -30,7 +30,7 @@ jobs:
           mysql password: '${{ secrets.MYSQL_PASSWORD }}'
 
       - name: gcloud action runner
-        uses: 'google-github-actions/auth@2'
+        uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{secrets.GCP_CREDENTIALS}}'
 
