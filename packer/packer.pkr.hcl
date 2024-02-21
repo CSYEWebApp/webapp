@@ -9,7 +9,7 @@ packer {
 
 variable "project_id" {
   type    = string
-  default = "csye-cloud-6225"
+  default = "dev-csye-6225-415001"
 }
 
 variable "source_image" {
@@ -79,7 +79,4 @@ build {
       "sudo systemctl enable webservice.service"
     ]
   }
-
-
-
 }
