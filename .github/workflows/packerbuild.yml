@@ -1,0 +1,57 @@
+name: Packer Validation and Build
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  build:
+    name: Integration Test and Packer Build
+    runs-on: ubuntu-latest
+
+    if: github.event.pull_request.merged == true
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Setup MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql database: 'hdptestapp'
+          mysql user: 'vamsi'
+          mysql password: '${{ secrets.MYSQL_PASSWORD }}'
+
+      - name: gcloud action runner
+        uses: 'google-github-actions/auth@2'
+        with:
+          credentials_json: '${{secrets.GCP_CREDENTIALS}}'
+
+      - name: Test
+        run: |
+          pwd
+          ls -al
+          mvn clean install -DskipTests=false          
+
+      - name: Initialize and Validate Packer Template
+        run: |
+          cd ./packer/
+          packer init packer.pkr.hcl
+          packer validate packer.pkr.hcl
+
+      - name: Format Packer Template
+        run: |
+          cd ./packer/
+          packer fmt packer.pkr.hcl
+
+      - name: Build Image with Packer
+        run: |
+          cd ./packer/
+          packer build packer.pkr.hcl

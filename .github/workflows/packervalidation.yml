@@ -1,0 +1,50 @@
+name: Packer Validation
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    name: Integration Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Setup MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql database: 'hdptestapp'
+          mysql user: 'vamsi'
+          mysql password: '${{ secrets.MYSQL_PASSWORD }}'
+
+      - name: Test
+        run: |
+          pwd
+          ls -al
+          mvn clean install -DskipTests=false
+
+      - name: Setup Packer
+        uses: hashicorp/setup-packer@main
+
+      - name: Initialize and Validate Packer Template
+        run: |
+          cd ./packer/
+          packer init packer.pkr.hcl
+          packer validate packer.pkr.hcl
+
+      - name: Format Packer Template
+        run: |
+          cd ./packer/
+          packer fmt packer.pkr.hcl
+          
+          
