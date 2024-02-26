@@ -9,7 +9,7 @@ packer {
 
 variable "project_id" {
   type    = string
-  default = "dev-csye-6225-415001"
+  default = "dev-csye-6225-415504"
 }
 
 variable "source_image" {
@@ -74,6 +74,11 @@ build {
       "sudo mysql -u root -e \"CREATE USER 'vamsi'@'localhost' IDENTIFIED BY 'STEYNlee@858';\" ",
       "sudo mysql -u root -e \"GRANT ALL PRIVILEGES ON *.* TO 'vamsi'@'localhost' with grant option;\"",
       "sudo mysql -u root -e \"FLUSH PRIVILEGES;\"",
+      "export DB_USER=\"vamsi\"",
+      "export DB_HOST=\"localhost\"",
+      "export DB_PASSWORD=\"STEYNlee@858\"",
+      "export DB_NAME=\"hdbapp\"",
+      "echo $DB_USER",
       "sudo systemctl daemon-reload",
       "sudo systemctl start webservice.service",
       "sudo systemctl enable webservice.service"
