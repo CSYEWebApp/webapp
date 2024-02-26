@@ -9,7 +9,7 @@ packer {
 
 variable "project_id" {
   type    = string
-  default = "dev-csye-6225-415504"
+  default = "dev-csye-6225-415001"
 }
 
 variable "source_image" {
