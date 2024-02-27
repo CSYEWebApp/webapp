@@ -7,7 +7,7 @@ packer {
   }
 }
 
-variable "project_id" {
+variable "project_id1" {
   type    = string
   default = "dev-csye-6225-415001"
 }
