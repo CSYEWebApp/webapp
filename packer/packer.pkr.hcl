@@ -55,7 +55,7 @@ build {
     source      = "../target/Web-Application-0.0.1-SNAPSHOT.jar"
     destination = "/tmp/Web-Application-0.0.1-SNAPSHOT.jar"
   }
-  provisioner "shell" {
+  provsioner "shell" {
     inline = [
       "sudo groupadd -f csye6225",
       "sudo useradd -s /sbin/nologin -g csye6225 -d /opt/csye6225 -m csye6225",
