@@ -33,7 +33,7 @@ variable "ssh_username" {
 }
 
 source "googlecompute" "webapp" {
-  project_id    = var.project_id
+  project_id  = var.project_id
   source_image  = var.source_image
   zone          = var.zone
   instance_name = "csye6225-${formatdate("YYYYMMDDhhmmss", timestamp())}"
