@@ -33,7 +33,7 @@ variable "ssh_username" {
 }
 
 source "googlecompute" "webapp" {
-  project_id  = var.project_id
+  project_id    = var.project_id
   source_image  = var.source_image
   zone          = var.zone
   instance_name = "csye6225-${formatdate("YYYYMMDDhhmmss", timestamp())}"
@@ -69,7 +69,6 @@ build {
       "sudo touch /opt/csye6225/application.properties",
       "sudo chown csye6225:csye6225 /opt/csye6225/application.properties",
       "sudo chmod 750 /opt/csye6225/application.properties",
-      "echo $DB_USER",
       "sudo systemctl daemon-reload",
       "sudo systemctl start webservice.service",
       "sudo systemctl enable webservice.service"
