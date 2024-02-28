@@ -46,5 +46,13 @@ jobs:
         run: |
           cd ./packer/
           packer fmt packer.pkr.hcl
+
+      - name: Check for Changes
+        run: |
+          git diff --exit-code
+          if [ $? -eq 1 ]; then
+            echo "ERROR: Running 'packer fmt' made changes to the packer.pkr.hcl file."
+            exit 1
+          fi    
           
           
