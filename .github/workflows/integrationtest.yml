@@ -42,3 +42,4 @@ jobs:
           pwd
           ls -al
           mvn clean install -DskipTests=false
+          
