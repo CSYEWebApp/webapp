@@ -20,13 +20,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-#      - name: Setup MySQL
-#        uses: mirromutth/mysql-action@v1.1
-#        with:
-#          mysql database: 'hdptestapp'
-#          mysql user: 'vamsi'
-#          mysql password: '${{ secrets.MYSQL_PASSWORD }}'
-
       - name: Build
         run: |
           pwd
