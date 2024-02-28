@@ -20,14 +20,29 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Setup MySQL
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          mysql database: 'hdptestapp'
-          mysql user: 'vamsi'
-          mysql password: '${{ secrets.MYSQL_PASSWORD }}'
+      - name: Set up MySQL
+        run: |
+          sudo apt-get update
+          sudo apt-get install mysql-server -y
+
+      - name: Start and Enable MySQL
+        run: |
+          sudo systemctl start mysql
+          sudo systemctl enable mysql
+          sudo systemctl status mysql
+
+      - name: Create User and Grant Access
+        run: |
+          sudo mysql -e "CREATE USER '${{ secrets.DB_USER}}'@'${{ secrets.DB_HOST}}' IDENTIFIED BY '${{ secrets.DB_PASSWORD}}';"
+          sudo mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${{ secrets.DB_USER}}'@'${{ secrets.DB_HOST}}' WITH GRANT OPTION;"
+          sudo mysql -e "FLUSH PRIVILEGES;"
 
       - name: Test
+        env:
+          DBHost: ${{ secrets.DB_HOST}}
+          DBDatabase: ${{ secrets.DBTEST_NAME}}
+          DBUser: ${{ secrets.DB_USER}}
+          DBPassword: ${{ secrets.DB_PASSWORD}}
         run: |
           pwd
           ls -al
