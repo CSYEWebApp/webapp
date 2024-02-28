@@ -42,7 +42,6 @@ source "googlecompute" "webapp" {
   tags          = ["csye6225"]
 }
 
-
 build {
   sources = ["sources.googlecompute.webapp"]
 
@@ -55,6 +54,7 @@ build {
     source      = "../target/Web-Application-0.0.1-SNAPSHOT.jar"
     destination = "/tmp/Web-Application-0.0.1-SNAPSHOT.jar"
   }
+
   provisioner "shell" {
     inline = [
       "sudo groupadd -f csye6225",
@@ -66,18 +66,9 @@ build {
       "sudo yum update -y",
       "sudo yum install -y java-17-openjdk-devel",
       "echo 'Completed Java Installation'",
-      "sudo yum install -y mysql-server",
-      "sudo systemctl start mysqld",
-      "sudo systemctl enable mysqld",
-      "sudo systemctl status mysqld",
-      "echo \"Installing mysql\"",
-      "sudo mysql -u root -e \"CREATE USER 'vamsi'@'localhost' IDENTIFIED BY 'STEYNlee@858';\" ",
-      "sudo mysql -u root -e \"GRANT ALL PRIVILEGES ON *.* TO 'vamsi'@'localhost' with grant option;\"",
-      "sudo mysql -u root -e \"FLUSH PRIVILEGES;\"",
-      "export DB_USER=\"vamsi\"",
-      "export DB_HOST=\"localhost\"",
-      "export DB_PASSWORD=\"STEYNlee@858\"",
-      "export DB_NAME=\"hdbapp\"",
+      "sudo touch /opt/csye6225/application.properties",
+      "sudo chown csye6225:csye6225 /opt/csye6225/application.properties",
+      "sudo chmod 750 /opt/csye6225/application.properties",
       "echo $DB_USER",
       "sudo systemctl daemon-reload",
       "sudo systemctl start webservice.service",

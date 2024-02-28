@@ -7,6 +7,7 @@ Type=simple
 User=csye6225
 Group=csye6225
 WorkingDirectory=/opt/csye6225/
+EnvironmentFile=/opt/csye6225/application.properties
 ExecStart=/usr/bin/java -jar /opt/csye6225/webapp-0.0.1-SNAPSHOT.jar
 Restart=always
 RestartSec=5

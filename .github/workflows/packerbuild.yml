@@ -1,19 +1,15 @@
 name: Packer Build
 
-#on:
-#  pull_request:
-#    types: [closed]
-
 on:
   pull_request:
-    branches: [ "main" ]
+    types: [closed]
 
 jobs:
   build:
     name: Packer Build
     runs-on: ubuntu-latest
 
-#    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
 
     steps:
       - name: Checkout Repository
