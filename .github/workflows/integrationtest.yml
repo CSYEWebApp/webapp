@@ -33,11 +33,9 @@ jobs:
 
       - name: Create User and Grant Access
         run: |
-          echo "Creting User"
+          sudo mysql --user=root --password=root
           sudo mysql -e "CREATE USER '${{ secrets.DB_USER}}'@'${{ secrets.DB_HOST}}' IDENTIFIED BY '${{ secrets.DB_PASSWORD}}';"
-          echo "Created User"
           sudo mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${{ secrets.DB_USER}}'@'${{ secrets.DB_HOST}}' WITH GRANT OPTION;"
-          echo "Granted Privileges"
           sudo mysql -e "FLUSH PRIVILEGES;"
 
       - name: Test
