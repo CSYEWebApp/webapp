@@ -20,18 +20,18 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Setup MySQL
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          mysql database: 'hdptestapp'
-          mysql user: 'vamsi'
-          mysql password: '${{ secrets.MYSQL_PASSWORD }}'
+#      - name: Setup MySQL
+#        uses: mirromutth/mysql-action@v1.1
+#        with:
+#          mysql database: 'hdptestapp'
+#          mysql user: 'vamsi'
+#          mysql password: '${{ secrets.MYSQL_PASSWORD }}'
 
-      - name: Test
+      - name: Build
         run: |
           pwd
           ls -al
-          mvn clean install -DskipTests=false
+          mvn clean install -DskipTests
 
       - name: Setup Packer
         uses: hashicorp/setup-packer@main
