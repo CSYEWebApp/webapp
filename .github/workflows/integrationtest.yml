@@ -34,12 +34,11 @@ jobs:
 
       - name: Test
         env:
-          DBHost: ${{ secrets.DB_HOST}}
-          DBDatabase: ${{ secrets.DBTEST_NAME}}
-          DBUser: ${{ secrets.DB_USER}}
-          DBPassword: ${{ secrets.DB_PASSWORD}}
+          DB_HOST: ${{ secrets.DB_HOST}}
+          DB_NAME: ${{ secrets.DBTEST_NAME}}
+          DB_USER: ${{ secrets.DB_USER}}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD}}
         run: |
           pwd
           ls -al
           mvn clean install -DskipTests=false
-          
