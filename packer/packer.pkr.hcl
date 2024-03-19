@@ -51,6 +51,11 @@ build {
   }
 
   provisioner "file" {
+    source      = "../ops-agent/config.yaml"
+    destination = "/tmp/config.yaml"
+  }
+
+  provisioner "file" {
     source      = "../target/Web-Application-0.0.1-SNAPSHOT.jar"
     destination = "/tmp/Web-Application-0.0.1-SNAPSHOT.jar"
   }
@@ -63,26 +68,18 @@ build {
       "sudo mv /tmp/Web-Application-0.0.1-SNAPSHOT.jar /opt/csye6225/webapp-0.0.1-SNAPSHOT.jar",
       "sudo chown -R csye6225:csye6225 /opt/csye6225/webapp-0.0.1-SNAPSHOT.jar",
       "sudo chmod 750 /opt/csye6225/webapp-0.0.1-SNAPSHOT.jar",
+      "sudo chown csye6225:csye6225 /var",
+      "sudo chown csye6225:csye6225 /var/log",
       "sudo yum update -y",
       "sudo yum install -y java-17-openjdk-devel",
       "echo 'Completed Java Installation'",
       "sudo touch /opt/csye6225/application.properties",
       "sudo chown csye6225:csye6225 /opt/csye6225/application.properties",
       "sudo chmod 750 /opt/csye6225/application.properties",
-      #      "sudo curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh",
-      #      "sudo bash add-google-cloud-ops-agent-repo.sh --also-install",
-      #      "sudo systemctl restart google-cloud-ops-agent",
-      #      "sudo tee -a /etc/google-fluentd/config.d/my-app.conf << EOF",
-      #      "<source>",
-      #      "  @type tail",
-      #      "  format json",
-      #      "  path /tmp/log/webapp.log",
-      #      "  pos_file /var/lib/google-fluentd/pos/my-app.log.pos",
-      #      "  read_from_head true",
-      #      "  tag my-app",
-      #      "</source>",
-      #      "EOF",
-      #      "sudo systemctl restart google-fluentd",
+      "sudo curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh",
+      "sudo bash add-google-cloud-ops-agent-repo.sh --also-install",
+      "sudo mv /tmp/config.yaml /etc/google-cloud-ops-agent/config.yaml",
+      "sudo systemctl restart google-cloud-ops-agent",
       "sudo systemctl daemon-reload",
       "sudo systemctl start webservice.service",
       "sudo systemctl enable webservice.service"
