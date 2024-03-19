@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,6 +31,7 @@ public class UserController {
     public ResponseEntity<Null> updateUser(@RequestBody UserRequestDTO updateUserInfo) {
         System.out.println("User PutMapping");
         String email = authenticationService.getCredentialsFromRequest(request)[0];
+        logger.debug("Email retrieved from request: {}", email);
         System.out.println(email);
         User user = userservice.findByUsername(email);
         userservice.updateUser(user, updateUserInfo);
@@ -37,11 +39,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }
-
     @PostMapping("/v1/user")
     public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
 
         System.out.println("User PostMapping");
+        if (StringUtils.isEmpty(user.getPassword())) {
+            logger.error("Password field is empty. Cannot create user");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
         User existingUser = userservice.findByUsername(user.getUsername());
 
         if (existingUser != null) {
