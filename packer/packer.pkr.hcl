@@ -24,7 +24,7 @@ variable "zone" {
 
 variable "machine_type" {
   type    = string
-  default = "e2-medium"
+  default = "e2-standard-8"
 }
 
 variable "ssh_username" {
@@ -69,6 +69,20 @@ build {
       "sudo touch /opt/csye6225/application.properties",
       "sudo chown csye6225:csye6225 /opt/csye6225/application.properties",
       "sudo chmod 750 /opt/csye6225/application.properties",
+      #      "sudo curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh",
+      #      "sudo bash add-google-cloud-ops-agent-repo.sh --also-install",
+      #      "sudo systemctl restart google-cloud-ops-agent",
+      #      "sudo tee -a /etc/google-fluentd/config.d/my-app.conf << EOF",
+      #      "<source>",
+      #      "  @type tail",
+      #      "  format json",
+      #      "  path /tmp/log/webapp.log",
+      #      "  pos_file /var/lib/google-fluentd/pos/my-app.log.pos",
+      #      "  read_from_head true",
+      #      "  tag my-app",
+      #      "</source>",
+      #      "EOF",
+      #      "sudo systemctl restart google-fluentd",
       "sudo systemctl daemon-reload",
       "sudo systemctl start webservice.service",
       "sudo systemctl enable webservice.service"

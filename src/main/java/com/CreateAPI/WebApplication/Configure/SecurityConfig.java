@@ -2,6 +2,8 @@ package com.CreateAPI.WebApplication.Configure;
 
 import com.CreateAPI.WebApplication.service.HealthService;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,6 +42,8 @@ public class SecurityConfig {
 //        return user;
 //    }
 
+    private static final Logger logger = LogManager.getLogger(SecurityConfig.class);
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests)->requests
@@ -60,8 +64,10 @@ public class SecurityConfig {
         return(request, response, authException) -> {
             if(!healthService.checkDatabaseConnectivity()){
                 response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+                logger.error("Database connectivity issue - Service Unavailable");
             }else{
                 System.out.println("Here in customAuthenticationEntryPoint");
+                logger.debug("Unauthorized access detected");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
         };

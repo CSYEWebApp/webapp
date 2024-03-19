@@ -1,6 +1,8 @@
 package com.CreateAPI.WebApplication.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
@@ -15,6 +17,7 @@ public class AuthenticationService {
 //        }
 //        return null;
 //    }
+    private static final Logger logger = LogManager.getLogger(AuthenticationService.class);
     public String[] getCredentialsFromRequest(HttpServletRequest request){
         String header = request.getHeader("Authorization");
         if(header!=null && header.startsWith("Basic")){
@@ -25,6 +28,8 @@ public class AuthenticationService {
                 return decodedString.split(":");
             }catch (Exception e){
                 System.out.println("Encountered exception: "+e.getMessage());
+                logger.error("Encountered exception while extracting credentials: {}", e.getMessage());
+
             }
         }
         return null;
