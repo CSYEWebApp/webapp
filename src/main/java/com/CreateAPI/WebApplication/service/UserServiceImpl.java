@@ -10,6 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class UserServiceImpl implements UserService{
 
@@ -20,6 +25,14 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
+    private static final long VERIFICATION_TOKEN_EXPIRY_MINUTES = 1;
+
+    @Override
+    public boolean isVerified(UUID id) {
+        Optional<User> optionalUser = userrepository.findById(id);
+        return optionalUser.map(User::isVerified).orElse(false);
+    }
 
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
     @Override
@@ -47,5 +60,58 @@ public class UserServiceImpl implements UserService{
         user.setPassword(hashedPassword);
         logger.info("New user created with username: {}: ", user.getUsername());
         return  userrepository.save(user);
+    }
+
+
+
+
+    @Override
+    public boolean verifyUser(UUID id) throws Exception {
+        try {
+            Optional<User> optionalUser = userrepository.findById(id);
+            if(optionalUser.isPresent()) {
+                User user = optionalUser.get();
+                if (isVerificationTokenValid(user)) {
+                    user.setVerified(true);
+                    userrepository.save(user);
+                    return true;
+                } else {
+                    System.out.println("Verification ID expired for user: {}"+ user.getUsername());
+//                    logger.warn("Verification ID expired for user: {}", user.getUsername());
+                    return false;
+                }
+            }
+
+//            System.out.println(UUID.fromString(id));
+//            if (user != null) {
+//                if (isVerificationTokenValid(user)) {
+//                    user.setVerified(true);
+//                    userrepo.save(user);
+//                    return true;
+//                } else {
+//                    System.out.println("Verification ID expired for user: {}"+ user.getUsername());
+////                    logger.warn("Verification ID expired for user: {}", user.getUsername());
+//                    return false;
+//                }
+            else {
+                System.out.println("User not found with verification ID: {}"+  id);
+//                logger.warn("User not found with verification ID: {}", id);
+                return false;
+            }
+        } catch (Exception e) {
+            System.out.println("Error verifying user: {}" + e.getMessage());
+//            logger.error("Error verifying user: {}", e.getMessage());
+            throw new Exception("Error during user verification"); //
+        }
+    }
+    private boolean isVerificationTokenValid(User user) {
+        LocalDateTime tokenCreatedAt = user.getAccountCreated();
+        if (tokenCreatedAt == null) {
+//            logger.warn("User verification token creation time not set");
+            return false;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        long minutesElapsed = Duration.between(tokenCreatedAt, now).toMinutes();
+        return minutesElapsed <= VERIFICATION_TOKEN_EXPIRY_MINUTES;
     }
 }

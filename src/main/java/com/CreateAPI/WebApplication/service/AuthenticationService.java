@@ -10,7 +10,7 @@ import java.util.Base64;
 @Service
 public class AuthenticationService {
 
-//    public String extractAuthenticatedUsername(HttpServletRequest request) {
+    //    public String extractAuthenticatedUsername(HttpServletRequest request) {
 //        String[] credentials = getCredentialsFromRequest(request);
 //        if (credentials != null && credentials.length > 0) {
 //            return credentials[0]; // Assuming username is the first element in credentials array
