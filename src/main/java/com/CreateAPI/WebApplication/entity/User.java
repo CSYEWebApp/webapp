@@ -1,13 +1,11 @@
 package com.CreateAPI.WebApplication.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import jakarta.validation.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -16,7 +14,10 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
+    @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID id;
 
 
@@ -31,6 +32,16 @@ public class User {
     private String lastName;
     private LocalDateTime accountCreated;
     private LocalDateTime accountUpdated;
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
+    private boolean  verified;
 
     @PrePersist
     public  void  create(){
@@ -124,7 +135,7 @@ public class User {
                 '}';
     }
 
-    public User(String username, String password, String firstName, String lastName, LocalDateTime accountCreated, LocalDateTime accountUpdated, UUID id) {
+    public User(String username, String password, String firstName, String lastName, LocalDateTime accountCreated, LocalDateTime accountUpdated, UUID id, boolean verified) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -132,6 +143,7 @@ public class User {
         this.accountCreated = accountCreated;
         this.accountUpdated = accountUpdated;
         this.id = id;
+        this.verified= verified;
     }
 
     public User() {

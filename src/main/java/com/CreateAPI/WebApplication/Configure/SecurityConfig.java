@@ -49,10 +49,11 @@ public class SecurityConfig {
         http.authorizeHttpRequests((requests)->requests
                 .requestMatchers(new AntPathRequestMatcher("/healthz")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/v1/user","POST")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/v1/verify/*","GET")).permitAll()
                 .anyRequest()
                 .authenticated());
         http.httpBasic(withDefaults())
-                        .authenticationProvider(customAuthenticationProvider)
+                .authenticationProvider(customAuthenticationProvider)
                 .exceptionHandling((exceptions)->exceptions.authenticationEntryPoint(customAuthenticationEntryPoint())
                 );
         http.csrf(AbstractHttpConfigurer::disable);
