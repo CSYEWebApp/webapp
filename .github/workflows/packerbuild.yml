@@ -71,7 +71,7 @@ jobs:
         id: get_latest_image_id
         run: |
           gcloud config set project "$GOOGLE_PROJECT_ID"
-          latest_image_id=$(gcloud compute images list  --sort-by=creationTimestamp --format='value(id)' --limit=1)
+          latest_image_id=$(gcloud compute images list  --sort-by=~creationTimestamp --format='value(NAME)' --limit=1)
           echo "$latest_image_id"
         env:
           GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
