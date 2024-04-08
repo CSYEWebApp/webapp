@@ -2,14 +2,14 @@ name: Packer Build
 
 on:
   pull_request:
-    types: [closed]
+    branches: [ "main" ]
 
 jobs:
   build:
     name: Packer Build
     runs-on: ubuntu-latest
 
-    if: github.event.pull_request.merged == true
+#    if: github.event.pull_request.merged == true
 
     steps:
       - name: Checkout Repository
@@ -65,3 +65,41 @@ jobs:
         run: |
           cd ./packer/
           packer build packer.pkr.hcl
+
+      - name: Create Instance Template with Hardcoded Values
+        run: |
+          gcloud compute instance-templates create webappinstance_template-version2 \
+            --machine-type=e2-standard-2 \
+            --tags="my-vm" \
+            --image=packer-1712437805 \  # Adjust for custom image
+            --boot-disk-type=pd-balanced \
+            --subnet=https://www.googleapis.com/compute/v1/projects/dev-csye-6225-415001/regions/us-central1/subnetworks/vpc1-webapp-subnet \
+            --metadata="startup-script=$(cat <<'EOF'
+            #!/bin/bash
+
+            # Sample hard-coded values (replace with your actual values)
+            SPRING_DATASOURCE_URL="jdbc:mysql://localhost:3306/webapp"
+            SPRING_DATASOURCE_USERNAME="webapp"
+            SPRING_DATASOURCE_PASSWORD="password123"
+
+            > /opt/csye6225/application.properties
+            echo "spring.datasource.url=$SPRING_DATASOURCE_URL" >> /opt/csye6225/application.properties
+            echo "spring.datasource.username=$SPRING_DATASOURCE_USERNAME" >> /opt/csye6225/application.properties
+            echo "spring.datasource.password=$SPRING_DATASOURCE_PASSWORD" >> /opt/csye6225/application.properties
+            echo "spring.jpa.hibernate.ddl-auto=update" >> /opt/csye6225/application.properties
+            echo "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect" >> /opt/csye6225/application.properties
+            echo "spring.jackson.deserialization.fail-on-unknown-properties=true" >> /opt/csye6225/application.properties
+            echo "projectId=dev-csye-6225-415001" >> /opt/csye6225/application.properties
+            echo "topicId=verify_email" >> /opt/csye6225/application.properties
+            EOF
+            )" \
+            --service-account=web-app-sa@dev-csye-6225-415001.iam.gserviceaccount.com \
+            --scopes=https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/pubsub
+
+      - name: Configure Managed Instance Group with New Template
+        run: gcloud compute instance-groups managed set-instance-template webapp-instance-group --template webappinstance_template-version2  # Replace with actual group name
+
+      - name: Recreate Instances in Managed Instance Group
+        run: gcloud compute instance-groups managed recreate-instances webapp-instance-group --instances all  # Replace with actual group name
+          
+          
