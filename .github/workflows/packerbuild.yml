@@ -2,7 +2,7 @@ name: Packer Build
 
 on:
   pull_request:
-    types: [closed]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -65,3 +65,28 @@ jobs:
         run: |
           cd ./packer/
           packer build packer.pkr.hcl
+
+
+      - name: Get Latest Image ID
+        id: get_latest_image_id
+        run: |
+            gcloud config set project $GOOGLE_PROJECT_ID
+            latest_image_id=$(gcloud compute images list --project=$GOOGLE_PROJECT_ID --sort-by=creationTimestamp --format='value(id)' --limit=1)
+            echo "::set-output name=latest_image_id::$latest_image_id"
+        env:
+            GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+
+      - name: Create New Instance Template
+        run: |
+                gcloud config set project $GOOGLE_PROJECT_ID
+                gcloud compute instance-templates create $TEMPLATE_NAME \
+                  --machine-type $MACHINE_TYPE \
+                  --image packer-1712437805 \
+                  --metadata $INSTANCE_METADATA \
+                  --region $REGION
+        env:
+            GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+            TEMPLATE_NAME: ${{ secrets.TEMPLATE_NAME }}
+            MACHINE_TYPE: ${{ secrets.MACHINE_TYPE }}
+            REGION: ${{ secrets.REGION }}
+            INSTANCE_METADATA: ${{ secrets.INSTANCE_METADATA }}
