@@ -79,7 +79,7 @@ jobs:
       - name: Create New Instance Template
         run: |
           gcloud config set project $GOOGLE_PROJECT_ID
-          echo "${{ secrets[$INSTANCE_METADATA] }}" > startup-script.sh
+          echo "${{ secrets.INSTANCE_METADATA }}" > startup-script.sh
           gcloud compute instance-templates create $TEMPLATE_NAME \
             --machine-type $MACHINE_TYPE \
             --image packer-1712437805 \
