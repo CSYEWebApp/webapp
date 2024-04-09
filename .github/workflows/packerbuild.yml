@@ -72,26 +72,14 @@ jobs:
         run: |
           latest_image_id=$(gcloud compute images list  --sort-by=~creationTimestamp --format='value(NAME)' --limit=1)
           echo "$latest_image_id"
-          echo "Image URL: projects/dev-csye-6225-415001/global/images/$latest_image_id"
 
       - name: Create New Instance Template
         run: |
-            gcloud compute instance-templates create "${{ secrets.TEMPLATE_NAME }}" --project=dev-csye-6225-415001 --machine-type=e2-standard-2 --network-interface=network-tier=PREMIUM,subnet=vpc1-webapp-subnet --metadata=startup-script="${{ secrets.INSTANCE_METADATA }}" --maintenance-policy=MIGRATE --provisioning-model=STANDARD --service-account=web-app-sa@dev-csye-6225-415001.iam.gserviceaccount.com --scopes=https://www.googleapis.com/auth/pubsub,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write --region=us-central1 --tags=my-vm --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image="$latest_image_id",mode=rw,size=20,type=pd-standard --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity=any
-
+            gcloud compute instance-templates create "${{ secrets.TEMPLATE_NAME }}" --project=dev-csye-6225-415001 --machine-type=e2-standard-2 --network-interface=network-tier=PREMIUM,subnet=vpc1-webapp-subnet --metadata=startup-script="${{ secrets.INSTANCE_METADATA }}" --maintenance-policy=MIGRATE --provisioning-model=STANDARD --service-account=web-app-sa@dev-csye-6225-415001.iam.gserviceaccount.com --scopes=https://www.googleapis.com/auth/pubsub,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write --region=us-central1 --tags=my-vm --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image=projects/dev-csye-6225-415001/global/images/"$latest_image_id",mode=rw,size=20,type=pd-standard --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity=any
 
         env:
-          GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
           TEMPLATE_NAME: ${{ secrets.TEMPLATE_NAME }}
-#          MACHINE_TYPE: ${{ secrets.MACHINE_TYPE }}
-#          REGION: ${{ secrets.REGION }}
           INSTANCE_METADATA: ${{ secrets.INSTANCE_METADATA }}
-
-
-#      - name: Set the Version Template to MIG
-#        run: |
-#          gcloud compute instance-groups managed set-instance-template \
-#          webapp-instance-group --template="${{ secrets.TEMPLATE_NAME }}"\
-#          --region=us-central1
 
       - name: Recreate the Instances
         run: |          
