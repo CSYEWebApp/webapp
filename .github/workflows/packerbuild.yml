@@ -87,7 +87,7 @@ jobs:
             --scopes=https://www.googleapis.com/auth/pubsub,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write \
             --region=us-central1 \
             --tags=my-vm \
-            --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image=projects/dev-csye-6225-415001/global/images/"$latest_image_id",mode=rw,size=20,type=pd-standard \
+            --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image="$latest_image_id",mode=rw,size=20,type=pd-standard \
             --no-shielded-secure-boot \
             --shielded-vtpm \
             --shielded-integrity-monitoring \
