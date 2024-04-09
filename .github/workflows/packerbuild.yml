@@ -81,10 +81,7 @@ jobs:
 
       - name: Recreate the Instances
         run: |          
-          gcloud compute instance-groups managed rolling-action start-update webapp-instance-group\
-          --version=template="vpc1-webapp-instance-${{ steps.timestamp.outputs.timestamp }}"\
-          --max-surge=5 \
-          --region=us-central1
+          gcloud compute instance-groups managed rolling-action start-update webapp-instance-group --version=template="vpc1-webapp-instance-${{ steps.timestamp.outputs.timestamp }}" --max-surge=5 --region=us-central1
           
           
           
