@@ -101,16 +101,18 @@ jobs:
           INSTANCE_METADATA: ${{ secrets.INSTANCE_METADATA }}
 
 
-      - name: Set the Version Template to MIG
-        run: |
-          gcloud compute instance-groups managed set-instance-template \
-          webapp-instance-group --template="${{ secrets.TEMPLATE_NAME }}"
+#      - name: Set the Version Template to MIG
+#        run: |
+#          gcloud compute instance-groups managed set-instance-template \
+#          webapp-instance-group --template="${{ secrets.TEMPLATE_NAME }}"\
+#          --region=us-central1
 
       - name: Recreate the Instances
         run: |          
           gcloud compute instance-groups managed rolling-action start-update webapp-instance-group\
           --version=template="${{ secrets.TEMPLATE_NAME }}"\
-          --max-surge=5 
+          --max-surge=5 \
+          --region=us-central1
           
           
           
