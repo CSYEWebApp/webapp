@@ -83,5 +83,17 @@ jobs:
         run: |          
           gcloud compute instance-groups managed rolling-action start-update webapp-instance-group --version=template="vpc1-webapp-instance-${{ steps.timestamp.outputs.timestamp }}" --max-surge=5 --region=us-central1
           
-          
+      - name: Wait for Version Target
+        id: wait_for_version_target
+        run: |
+          while true; do
+            is_reached=$(gcloud compute instance-groups managed describe webapp-instance-group --region=us-central1 --format="value(status.versionTarget.isReached)")
+            if [ "$is_reached" == "True" ]; then
+              echo "Version target is Matched."
+              break
+            else
+              echo "Version target is not yet reached. Waiting..."
+              sleep 60  # Adjust the delay time as needed
+            fi
+          done    
           
