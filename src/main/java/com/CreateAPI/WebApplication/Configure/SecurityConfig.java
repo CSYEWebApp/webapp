@@ -48,8 +48,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests)->requests
                 .requestMatchers(new AntPathRequestMatcher("/healthz")).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/v1/user","POST")).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/v1/verify/*","GET")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/v2/user","POST")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/v2/verify/*","GET")).permitAll()
                 .anyRequest()
                 .authenticated());
         http.httpBasic(withDefaults())
