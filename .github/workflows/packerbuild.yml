@@ -64,7 +64,7 @@ jobs:
       - name: Build Image with Packer
         run: |
           cd ./packer/
-          packer build packer.pkr.hcl | tee pkroutput.txt
+          packer_output=$(packer build -machine-readable packer.pkr.hcl)
 
       - name: Generate Timestamp
         id: timestamp
@@ -73,7 +73,7 @@ jobs:
       - name: Create New Instance Template
         run: |
           last_line=$(tail -n 1 pkroutput.txt)
-          latest_image_id=$(echo $last_line | awk -F': ' '{print $NF}')
+          latest_image_id=$(echo "$packer_output" | awk -F ',' '$2 == "artifact,0,id" {print $NF}')
           echo "$latest_image_id"          
           gcloud compute instance-templates create "vpc1-webapp-instance-${{ steps.timestamp.outputs.timestamp }}" --project=dev-csye-6225-415001 --machine-type=e2-standard-2 --network-interface=network-tier=PREMIUM,subnet=vpc1-webapp-subnet --metadata=startup-script="${{ secrets.INSTANCE_METADATA }}" --maintenance-policy=MIGRATE --provisioning-model=STANDARD --service-account=web-app-sa@dev-csye-6225-415001.iam.gserviceaccount.com --scopes=https://www.googleapis.com/auth/pubsub,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write --region=us-central1 --tags=my-vm --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image="$latest_image_id",kms-key=projects/dev-csye-6225-415001/locations/us-central1/keyRings/my-key-ring4/cryptoKeys/vm-crypto-key,mode=rw,size=20,type=pd-standard --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity=any
 
