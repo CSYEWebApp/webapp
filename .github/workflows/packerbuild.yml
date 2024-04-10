@@ -64,7 +64,7 @@ jobs:
       - name: Build Image with Packer
         run: |
           cd ./packer/
-          packer build packer.pkr.hcl ./packer/. | tee pkroutput.txt
+          packer build packer.pkr.hcl | tee pkroutput.txt
 
       - name: Generate Timestamp
         id: timestamp
