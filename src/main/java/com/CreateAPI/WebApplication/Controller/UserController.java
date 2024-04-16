@@ -41,7 +41,7 @@ public class UserController {
     Publisher publisher;
 
     private static final Logger logger = LogManager.getLogger(HealthzController.class);
-    @PutMapping("/v2/user/self")
+    @PutMapping("/v3/user/self")
     public ResponseEntity<Null> updateUser(@RequestBody UserRequestDTO updateUserInfo) {
         System.out.println("User PutMapping");
         String email = authenticationService.getCredentialsFromRequest(request)[0];
@@ -63,7 +63,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }
-    @PostMapping("/v2/user")
+    @PostMapping("/v3/user")
     public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
 
         System.out.println("User PostMapping");
@@ -89,7 +89,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userdto);
     }
 
-    @GetMapping("/v2/user/self")
+    @GetMapping("/v3/user/self")
     public ResponseEntity<UserDTO> getUserInfo(HttpServletRequest request) {
 
         String email = authenticationService.getCredentialsFromRequest(request)[0];
